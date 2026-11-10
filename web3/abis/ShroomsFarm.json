@@ -77,7 +77,23 @@
   },
   {
     "inputs": [],
+    "name": "NotAuthorisedToNotify",
+    "type": "error"
+  },
+  {
+    "inputs": [],
     "name": "NothingToKick",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "readyAt",
+        "type": "uint256"
+      }
+    ],
+    "name": "NotifyTooSoon",
     "type": "error"
   },
   {
@@ -381,6 +397,19 @@
       }
     ],
     "name": "PoolUnlocked",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "distributor",
+        "type": "address"
+      }
+    ],
+    "name": "RewardDistributorSet",
     "type": "event"
   },
   {
@@ -779,6 +808,25 @@
     "inputs": [
       {
         "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "lastNotified",
+    "outputs": [
+      {
+        "internalType": "uint64",
+        "name": "",
+        "type": "uint64"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
         "name": "pid",
         "type": "uint256"
       }
@@ -1057,6 +1105,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "rewardDistributor",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -1094,6 +1155,19 @@
       }
     ],
     "name": "setGate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "d",
+        "type": "address"
+      }
+    ],
+    "name": "setRewardDistributor",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
