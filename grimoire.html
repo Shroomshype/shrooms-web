@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Grimoire — Shrooms</title>
+<meta name="description" content="How Shrooms works: emissions, rarity weights, the vault, the contracts, and what the APY number actually means.">
+<link rel="icon" href="assets/icon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+<style>
+  .toc{
+    position:sticky;top:92px;align-self:start;
+    font-size:14px;line-height:2;
+  }
+  .toc a{color:var(--muted);text-decoration:none;display:block;padding:2px 0}
+  .toc a:hover{color:var(--cream)}
+  .doc{display:grid;grid-template-columns:200px 1fr;gap:44px;margin-top:30px}
+  @media (max-width:900px){ .doc{grid-template-columns:1fr} .toc{display:none} }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap bar-in">
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt="" width="34" height="34"><span>Shrooms</span></a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="farms.html">Farms</a>
+      <a href="vault.html">Treasury</a>
+      <a href="tokenomics.html">Tokenomics</a>
+      <a href="grimoire.html">Grimoire</a>
+    </nav>
+    <button class="btn" data-connect>Connect wallet</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="phead">
+    <h1>The grimoire</h1>
+    <p>What the protocol actually does, in the order it matters.</p>
+  </section>
+
+  <div class="doc">
+    <nav class="toc">
+      <a href="#emissions">Emissions</a>
+      <a href="#rarity">Rarity weights</a>
+      <a href="#apy">What APY means</a>
+      <a href="#vault">The vault</a>
+      <a href="#contracts">Contracts</a>
+      <a href="#risk">Risk</a>
+    </nav>
+
+    <div class="prose">
+
+      <h2 id="emissions">There are no emissions</h2>
+      <p>SPORES is never printed on a schedule. It is minted only against HYPE the treasury has already received from SHROOMS trading fees, so supply is an <em>output</em> of real activity rather than a policy anyone sets. Maximum supply is capped at <strong>1,000,000,000</strong>, and reaching it is not an ending — past the cap, incoming HYPE mints nothing and becomes pure backing, so the redemption floor climbs faster.</p>
+      <p>Fees land in a reserve that is not redeemable. Each week <code>drip()</code> moves 2% of it into backing and mints the matching SPORES to the farm. That turns a front-loaded launch spike into a long annuity: at 2% the reserve has a half-life of about 34 weeks and never quite empties.</p>
+
+      <h2 id="rarity">Rarity weights</h2>
+      <p>Every strain stakes SHROOMS or the SHROOMS-HYPE LP — nothing else is accepted. Because the harvest is fixed by fee income, a pool taking an outside asset would pay SHROOMS holders' rewards to people who never bought SHROOMS and generate no fees. Strains differ by commitment instead: what they cost to unlock, and the share of each harvest they draw.</p>
+      <table>
+        <thead><tr><th>Strain</th><th>Stake</th><th>Tier</th><th class="num">Entry burn</th><th class="num">Share of harvest</th></tr></thead>
+        <tbody id="weights"></tbody>
+      </table>
+      <p>A Legendary strain draws more of the harvest per token staked, which is why its headline rate is higher — and why it fills up first.</p>
+
+      <h2 id="apy">What the APY number actually means</h2>
+      <p>The percentage on a card is the strain's share of each harvest, set by its weight. Turning that into a yield needs three more things, none of which live on chain:</p>
+      <ul>
+        <li>How much HYPE the treasury dripped this period.</li>
+        <li>What SPORES is worth against SHROOMS.</li>
+        <li>How much is already staked in that strain.</li>
+      </ul>
+      <p>Which leads to two consequences worth designing around.</p>
+      <p><strong>The rate falls as deposits rise.</strong> Each drip releases a fixed pot, split across everyone staked. A high rate means few people have staked yet, not a promise about the future.</p>
+      <p><strong>The rate rises with trading volume.</strong> More SHROOMS trading means more HYPE in the reserve, which means bigger drips. Yield is tied to real activity rather than to a schedule.</p>
+
+      <div class="note">
+        <p>Yields here are fee revenue divided by stake, so they move with real trading volume and will be modest compared with an emissions farm. That is the trade: the number is smaller, and it is not being printed. Every figure on this site is a simulation until the contracts are live.</p>
+      </div>
+
+      <h2 id="vault">The treasury</h2>
+      <p>Every SPORES is a claim on a pro-rata slice of the HYPE in the Liquidity Spores contract. Redeeming burns the SPORES and pays out its share, which leaves the ratio unchanged for everyone else. Redemption has no cooldown, no pause and no owner switch — a floor you can be stopped from reaching is not a floor.</p>
+      <p>Spending SPORES in the grove is the interesting case. Fertilising a plot or unlocking a Legendary strain <em>burns</em> it without paying anything out, so the HYPE stays and the floor rises for everyone still holding. Players who play make the token worth more for players who leave.</p>
+      <p><code>drip()</code> is permissionless so the weekly cycle does not depend on the team. If it is overdue, anyone can call it.</p>
+
+      <h2 id="contracts">Contracts</h2>
+      <p>Four contracts, deployed to Elysium testnet (chain <code>99801</code>, gas in HYPE).</p>
+      <table>
+        <thead><tr><th>Contract</th><th>Role</th></tr></thead>
+        <tbody>
+          <tr><td><code>LiquiditySpores</code></td><td>The HYPE treasury. Receives trading fees, drips them into backing, mints and redeems SPORES.</td></tr>
+          <tr><td><code>SporesToken</code></td><td>SPORES. No owner, no pause; the treasury is the only minter, fixed at construction.</td></tr>
+          <tr><td><code>ShroomsFarm</code></td><td>Staking across eight strains. Streams rewards it has been given — it cannot mint.</td></tr>
+          <tr><td><code>ShroomsTimelock</code></td><td>Owns the farm. Parameter changes queue publicly and wait out a delay.</td></tr>
+        </tbody>
+      </table>
+      <p>Source is on <a href="https://github.com/Shroomshype" target="_blank" rel="noopener">GitHub</a>. Addresses go here once they are verified on the Elysium explorer.</p>
+
+      <h2 id="risk">Risk</h2>
+      <p>This is a testnet deployment and the contracts have not been audited. Deviations from a stock staking contract are deliberate: boost ceilings fixed in code, per-pool accounting that cannot be inflated by a stray transfer, duplicate pools rejected, locked SPORES reserved so rewards can never be promised against other people's principal, a solvency check that reverts rather than letting a pool promise what it does not hold, and an emergency withdrawal that cannot be paused.</p>
+      <p>That hardening is a floor, not a substitute for an audit. Before this touches real money the owner needs to be a timelock rather than a single key, and the contracts need review by someone who did not write them.</p>
+
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <span class="foot-brand"><img src="assets/logo.png" alt="" width="28" height="28">Shrooms</span>
+      <div class="socials">
+        <a href="https://x.com/Shroomshype" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 2H22l-7.3 8.4L23.3 22h-6.7l-5.2-6.9L5.4 22H2.3l7.8-9L1.7 2h6.9l4.7 6.3L18.9 2Zm-1.1 18h1.7L7.3 3.7H5.5L17.8 20Z"/></svg>X</a>
+        <a href="https://t.me/shroomshype" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.9 4.3 18.9 19c-.2 1-.8 1.3-1.7.8l-4.6-3.4-2.2 2.1c-.3.3-.5.5-1 .5l.3-4.7 8.5-7.7c.4-.3-.1-.5-.6-.2L7.1 12.9l-4.5-1.4c-1-.3-1-1 .2-1.4l17.6-6.8c.8-.3 1.5.2 1.5 1Z"/></svg>Telegram</a>
+        <a href="https://github.com/Shroomshype" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 1.7 2.7 1.2 3.4.9.1-.7.4-1.2.7-1.5-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6A11.5 11.5 0 0 0 12 .5Z"/></svg>GitHub</a>
+      </div>
+    </div>
+    <p class="disc">Running on Elysium testnet. Rewards come from SHROOMS trading fees, not from emissions, so yields move with real trading volume. Every figure shown here is a simulation until the contracts are live.</p>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+  Shrooms.markCurrentNav();
+  Shrooms.initWallet();
+
+  // Weights mirror scripts/deploy.js in the contracts repo.
+  var WEIGHTS = STRAINS.map(function (f) { return f.weight; });
+  var total = WEIGHTS.reduce(function (a, b) { return a + b; }, 0);
+  document.getElementById('weights').innerHTML = STRAINS.map(function (f, i) {
+    var pct = (WEIGHTS[i] / total * 100).toFixed(1);
+    return '<tr><td>' + f.name + '</td>' +
+           '<td>' + STAKE_LABEL[f.stake] + '</td>' +
+           '<td style="color:' + TIER_VAR[f.tier] + '">' + f.tier + '</td>' +
+           '<td class="num">' + (f.gate ? (f.gate / 1000) + 'k' : '—') + '</td>' +
+           '<td class="num">' + pct + '%</td></tr>';
+  }).join('');
+</script>
+</body>
+</html>

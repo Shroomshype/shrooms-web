@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Treasury — Shrooms</title>
+<meta name="description" content="Every SPORES is a claim on HYPE held by the Liquidity Spores treasury. Redeem it any time.">
+<link rel="icon" href="assets/icon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+<style>
+  .tgrid{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;margin-top:34px;align-items:start}
+  .thero{
+    position:relative;overflow:hidden;
+    background:radial-gradient(130% 80% at 50% -20%, rgba(0,171,120,.16), transparent 62%), var(--void-2);
+    border:1px solid var(--edge);border-radius:26px;padding:28px;
+  }
+  .tstage{position:relative;height:180px;display:grid;place-items:center;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;touch-action:manipulation}
+  .tstage .glow{position:absolute;width:200px;height:200px;border-radius:50%;
+    background:radial-gradient(circle,rgba(0,171,120,.3),transparent 68%);filter:blur(12px);transition:.25s}
+  .tstage:hover .glow{opacity:1;transform:scale(1.14)}
+  .tstage img{position:relative;width:158px;height:158px;transform-origin:50% 92%;
+    filter:drop-shadow(0 16px 22px rgba(0,0,0,.6));animation:idle-bob 4.4s ease-in-out infinite;
+    pointer-events:none;user-select:none}
+  .tstage:hover img{animation:happy-hop .62s cubic-bezier(.26,.9,.35,1.3) infinite}
+  .tstage img.is-popping{animation:pop-squash .5s cubic-bezier(.22,1.2,.3,1) 1 !important}
+  .floorbig{text-align:center;margin-top:4px}
+  .floorbig b{display:block;font-family:var(--display);font-weight:800;font-size:40px;line-height:1;
+    letter-spacing:-.04em;color:var(--c-mint);font-variant-numeric:tabular-nums}
+  .floorbig span{font-size:13px;color:var(--muted)}
+  .rows{margin-top:22px}
+  .row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--edge-soft);font-size:14px}
+  .row:last-child{border-bottom:0}
+  .row span{color:var(--muted)}
+  .row b{font-weight:600;font-variant-numeric:tabular-nums}
+  .dripbox{margin-top:20px;background:var(--void-3);border:1px solid var(--edge);border-radius:18px;padding:18px}
+  .dripbox h4{font-family:var(--display);font-weight:700;font-size:16px;margin:0 0 6px}
+  .dripbox p{color:var(--muted);font-size:13.5px;margin:0 0 14px;line-height:1.6}
+  @media (max-width:900px){ .tgrid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap bar-in">
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt="" width="34" height="34"><span>Shrooms</span></a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="farms.html">Farms</a>
+      <a href="vault.html">Treasury</a>
+      <a href="tokenomics.html">Tokenomics</a>
+      <a href="grimoire.html">Grimoire</a>
+    </nav>
+    <button class="btn" data-connect>Connect wallet</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="phead">
+    <h1>The treasury</h1>
+    <p>Every SPORES you earn is a claim on HYPE sitting in the Liquidity Spores contract. You can redeem it for that HYPE at any time, or spend it on fertiliser and strain unlocks — which burns it, leaves the HYPE behind, and raises the floor for everyone still holding.</p>
+  </section>
+
+  <div class="tgrid">
+
+    <div class="thero">
+      <div class="tstage" id="stage" role="button" tabindex="0" aria-label="Poke the keeper">
+        <span class="glow"></span>
+        <img id="keeper" src="assets/strains/amanita.png" alt="Treasury keeper" width="158" height="158" draggable="false">
+      </div>
+      <div class="floorbig">
+        <b id="floor">—</b>
+        <span>HYPE per SPORES · only ever goes up</span>
+      </div>
+
+      <div class="rows">
+        <div class="row"><span>Reserve, not yet committed</span><b id="reserve">— HYPE</b></div>
+        <div class="row"><span>Backing, redeemable now</span><b id="backing">— HYPE</b></div>
+        <div class="row"><span>SPORES in circulation</span><b id="supply">—</b></div>
+        <div class="row"><span>Burned to date</span><b id="burned" style="color:var(--c-red)">—</b></div>
+        <div class="row"><span>Your SPORES</span><b id="yours">0</b></div>
+        <div class="row"><span>Worth, at the floor</span><b id="worth">0 HYPE</b></div>
+      </div>
+    </div>
+
+    <div class="stack" style="gap:22px">
+      <div class="panel">
+        <h3>Redeem SPORES for HYPE</h3>
+        <p style="margin-bottom:16px">Pro-rata against backing. No cooldown, no pause, no owner switch — a floor you can be stopped from reaching is not a floor.</p>
+        <label for="r-amt">Amount</label>
+        <div class="input">
+          <input id="r-amt" type="number" min="0" value="1000000" inputmode="decimal">
+          <span class="unit">SPORES</span>
+        </div>
+        <div class="row" style="border:0;padding:14px 0 4px">
+          <span>You receive</span><b id="r-out">— HYPE</b>
+        </div>
+        <button class="btn" id="redeem" style="width:100%;margin-top:10px" data-connect>Connect wallet</button>
+        <p class="fine">Redeeming is neutral: supply and backing fall together, so the floor is unchanged for everyone else.</p>
+      </div>
+
+      <div class="dripbox">
+        <h4>Anyone can drip the treasury</h4>
+        <p>Once a week, 2% of the reserve moves into backing and mints the matching SPORES to the farm. It is permissionless, so the cycle does not depend on us being awake. If it is overdue, call it yourself.</p>
+        <div class="row" style="border:0;padding:0 0 14px">
+          <span>Next drip</span><b id="next">—</b>
+        </div>
+        <button class="btn" id="drip" style="width:100%;background:var(--c-mint);color:#04140E">Drip the treasury</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="note" style="margin-top:34px">
+    <p><strong>This replaced the auto-compounding vault.</strong> Under the old design the farm minted rewards on a schedule and a vault re-staked them for you. Rewards now come from SHROOMS trading fees, which arrive in lumps, so there is nothing to continuously compound — there is a treasury that holds the fees and a farm that streams them out.</p>
+  </div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <span class="foot-brand"><img src="assets/logo.png" alt="" width="28" height="28">Shrooms</span>
+      <div class="socials">
+        <a href="https://x.com/Shroomshype" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 2H22l-7.3 8.4L23.3 22h-6.7l-5.2-6.9L5.4 22H2.3l7.8-9L1.7 2h6.9l4.7 6.3L18.9 2Zm-1.1 18h1.7L7.3 3.7H5.5L17.8 20Z"/></svg>X</a>
+        <a href="https://t.me/shroomshype" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.9 4.3 18.9 19c-.2 1-.8 1.3-1.7.8l-4.6-3.4-2.2 2.1c-.3.3-.5.5-1 .5l.3-4.7 8.5-7.7c.4-.3-.1-.5-.6-.2L7.1 12.9l-4.5-1.4c-1-.3-1-1 .2-1.4l17.6-6.8c.8-.3 1.5.2 1.5 1Z"/></svg>Telegram</a>
+        <a href="https://github.com/Shroomshype" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 1.7 2.7 1.2 3.4.9.1-.7.4-1.2.7-1.5-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6A11.5 11.5 0 0 0 12 .5Z"/></svg>GitHub</a>
+      </div>
+    </div>
+    <p class="disc">Running on Elysium testnet. Rewards come from SHROOMS trading fees, not from emissions, so yields move with real trading volume. Every figure shown here is a simulation until the contracts are live.</p>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+  Shrooms.markCurrentNav();
+  Shrooms.initWallet();
+
+  // Illustrative state, in the same shape the contract exposes.
+  var reserve = 143.5, backing = 28.4, supply = 31_040_000, burned = 43_200_000;
+  function floor() { return backing / supply; }
+
+  function paint() {
+    document.getElementById('floor').textContent = floor().toExponential(2);
+    document.getElementById('reserve').textContent = reserve.toFixed(1) + ' HYPE';
+    document.getElementById('backing').textContent = backing.toFixed(2) + ' HYPE';
+    document.getElementById('supply').textContent = (supply / 1e6).toFixed(1) + 'M';
+    document.getElementById('burned').textContent = (burned / 1e6).toFixed(1) + 'M';
+    out();
+  }
+  function out() {
+    var n = Math.max(0, parseFloat(document.getElementById('r-amt').value) || 0);
+    document.getElementById('r-out').textContent = (n * floor()).toFixed(4) + ' HYPE';
+  }
+  document.getElementById('r-amt').addEventListener('input', out);
+  paint();
+
+  // countdown to the next drip
+  var left = 3 * 86400 + 7 * 3600 + 12 * 60;
+  function pad(n) { return String(n).padStart(2, '0'); }
+  setInterval(function () {
+    left = left > 0 ? left - 1 : 7 * 86400;
+    var d = Math.floor(left / 86400), h = Math.floor(left / 3600) % 24;
+    document.getElementById('next').textContent =
+      d + 'd ' + pad(h) + ':' + pad(Math.floor(left / 60) % 60) + ':' + pad(left % 60);
+  }, 1000);
+
+  // poking the keeper, same gesture as a farm card
+  var stage = document.getElementById('stage'), keeper = document.getElementById('keeper');
+  stage.addEventListener('click', function (e) {
+    Shrooms.sparkle(stage, TIER_SPARK.Legendary, e);
+    if (!Shrooms.REDUCED) {
+      keeper.classList.remove('is-popping');
+      void keeper.offsetWidth;
+      keeper.classList.add('is-popping');
+      keeper.addEventListener('animationend', function () {
+        keeper.classList.remove('is-popping');
+      }, { once: true });
+    }
+  });
+  stage.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); stage.click(); }
+  });
+
+  document.getElementById('drip').addEventListener('click', function () {
+    var b = this;
+    b.disabled = true; b.textContent = 'Dripping…';
+    setTimeout(function () {
+      var moved = reserve * 0.02;
+      reserve -= moved;
+      var minted = (moved * supply) / backing;
+      backing += moved; supply += minted;
+      paint();
+      b.textContent = 'Dripped ' + moved.toFixed(2) + ' HYPE';
+      setTimeout(function () { b.disabled = false; b.textContent = 'Drip the treasury'; }, 1600);
+    }, 900);
+  });
+
+  document.addEventListener('wallet', function (e) {
+    var r = document.getElementById('redeem');
+    r.textContent = e.detail.connected ? 'Redeem' : 'Connect wallet';
+    if (e.detail.connected) {
+      r.removeAttribute('data-connect');
+      document.getElementById('yours').textContent = '2.4M';
+      document.getElementById('worth').textContent = (2_400_000 * floor()).toFixed(3) + ' HYPE';
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tokenomics — Shrooms</title>
+<meta name="description" content="How SHROOMS trading funds SPORES rewards, why the redemption floor only climbs, and what year one looks like.">
+<link rel="icon" href="assets/icon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css">
+<style>
+  .loop{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px}
+  .loop div{background:var(--void-2);border:1px solid var(--edge);border-radius:18px;padding:18px}
+  .loop .n{font-family:var(--display);font-weight:800;font-size:13px;color:var(--spore)}
+  .loop h4{font-family:var(--display);font-weight:700;font-size:16px;margin:7px 0 6px}
+  .loop p{margin:0;color:var(--muted);font-size:13.5px;line-height:1.55}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px}
+  .hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:30px}
+  .hero-stats div{background:var(--void-2);border:1px solid var(--edge);border-radius:18px;padding:20px}
+  .hero-stats dt{font-size:12.5px;color:var(--muted);margin-bottom:7px;line-height:1.4}
+  .hero-stats dd{margin:0;font-family:var(--display);font-weight:800;font-size:28px;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+  .sec{margin-top:66px}
+  .sec > p.lede{color:var(--muted);font-size:16px;max-width:66ch;margin:10px 0 0;line-height:1.7}
+  .tokencard{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:26px}
+  .tokencard .panel h3{font-size:21px;margin-bottom:10px}
+  .tokencard .panel p{margin-bottom:14px}
+  .kv{display:flex;justify-content:space-between;font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--edge-soft)}
+  .kv:last-child{border-bottom:0}
+  .kv span{color:var(--muted)}
+  .kv b{font-weight:600;font-variant-numeric:tabular-nums}
+  @media (max-width:900px){
+    .loop,.grid2,.grid3,.tokencard{grid-template-columns:1fr}
+    .hero-stats{grid-template-columns:repeat(2,1fr);gap:12px}
+    .hero-stats div{padding:16px}
+    .hero-stats dd{font-size:23px}
+    .hero-stats dt{font-size:11.5px}
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap bar-in">
+    <a class="brand" href="index.html"><img src="assets/logo.png" alt="" width="34" height="34"><span>Shrooms</span></a>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="farms.html">Farms</a>
+      <a href="vault.html">Treasury</a>
+      <a href="tokenomics.html">Tokenomics</a>
+      <a href="grimoire.html">Grimoire</a>
+    </nav>
+    <button class="btn" data-connect>Connect wallet</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="phead">
+    <h1>Tokenomics</h1>
+    <p>Two tokens. <strong>SHROOMS</strong> is what you buy and stake; trading it produces the fees that fund everything. <strong>SPORES</strong> is what you earn, and it cannot be printed — only minted against HYPE the treasury has already received.</p>
+  </section>
+
+  <dl class="hero-stats">
+    <div><dt>Floor growth, year one</dt><dd id="s-floor" style="color:var(--c-mint)">—</dd></div>
+    <div><dt>Reserve at year one</dt><dd id="s-reserve" style="color:var(--c-amber)">—</dd></div>
+    <div><dt>SPORES burned, year one</dt><dd id="s-burned" style="color:var(--c-red)">—</dd></div>
+    <div><dt>Maximum SPORES supply</dt><dd>1B</dd></div>
+  </dl>
+
+  <!-- ================================================== the two tokens -->
+  <section class="sec">
+    <div class="head"><h2>The two tokens</h2></div>
+    <div class="tokencard">
+      <div class="panel">
+        <h3 style="color:var(--scarlet-hi)">$SHROOMS</h3>
+        <p>The key to the grove. Launched on <a href="https://montramarkets.xyz/" target="_blank" rel="noopener" style="color:var(--spore)">Montra</a> with the whole supply locked as liquidity from block one — no team allocation, no unlock cliff, nothing held back.</p>
+        <p>Every strain accepts SHROOMS or the SHROOMS-HYPE LP, and nothing else. That is deliberate: the reward pot is fixed by fee income, so a pool taking an outside asset would pay SHROOMS holders' rewards to people who never bought SHROOMS.</p>
+        <div class="kv"><span>Supply</span><b>1,000,000,000</b></div>
+        <div class="kv"><span>Launch venue</span><b>Montra, Uniswap v4</b></div>
+        <div class="kv"><span>Quote asset</span><b>HYPE</b></div>
+        <div class="kv"><span>Team allocation</span><b style="color:var(--c-mint)">none</b></div>
+        <div class="kv"><span>Role</span><b>staked to earn SPORES</b></div>
+        <a class="btn" style="width:100%;margin-top:18px" href="https://montramarkets.xyz/" target="_blank" rel="noopener">Get SHROOMS on Montra</a>
+      </div>
+      <div class="panel">
+        <h3 style="color:var(--spore)">$SPORES</h3>
+        <p>The harvest. Minted only against HYPE already in the treasury, so supply is an output of real trading rather than a schedule anyone controls.</p>
+        <p>Redeem it for HYPE at the floor, or spend it in the grove — fertilise a plot for +0.50x, or unlock a richer strain. Spending burns it and leaves its HYPE behind, which lifts the floor for every holder who stayed.</p>
+        <div class="kv"><span>Max supply</span><b>1,000,000,000</b></div>
+        <div class="kv"><span>Emissions</span><b style="color:var(--c-mint)">none, ever</b></div>
+        <div class="kv"><span>Backed by</span><b>HYPE in the treasury</b></div>
+        <div class="kv"><span>Redeemable</span><b>any time, no cooldown</b></div>
+        <div class="kv"><span>Sinks</span><b>fertiliser, strain unlocks</b></div>
+        <a class="btn btn-ghost" style="width:100%;margin-top:18px" href="vault.html">See the treasury</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================== the loop -->
+  <section class="sec">
+    <div class="head"><h2>How value moves</h2></div>
+    <p class="lede">Four steps, and the only external input is people trading SHROOMS. No team wallet funds the rewards, because there is no team wallet.</p>
+    <div class="loop">
+      <div><span class="n">01</span><h4>Someone trades SHROOMS</h4><p>Montra charges a fee on every trade and routes it, in HYPE, to the Liquidity Spores treasury.</p></div>
+      <div><span class="n">02</span><h4>The treasury drips</h4><p>2% of the reserve moves into backing each week and mints the matching SPORES. The rest waits.</p></div>
+      <div><span class="n">03</span><h4>Farmers earn it</h4><p>That SPORES streams to everyone staking SHROOMS, split by strain weight and multiplier.</p></div>
+      <div><span class="n">04</span><h4>They redeem or burn</h4><p>Redeeming returns HYPE at the floor. Burning for boosts leaves the HYPE behind, lifting the floor for everyone else.</p></div>
+    </div>
+  </section>
+
+  <!-- ===================================================== fee income -->
+  <section class="sec">
+    <div class="head"><h2>Where the money comes from</h2></div>
+    <p class="lede">Every reward paid in this protocol started as someone trading SHROOMS. Montra charges <strong>1%</strong> on every trade, and <strong>half of that goes to the treasury</strong> — so every 200 HYPE of volume puts 1 HYPE behind SPORES. The other half funds the team and marketing. Week one's modelled volume is about <b id="f-volume">—</b>. The launch spike fades, but organic trading does not stop, and that baseline is what makes the whole thing perpetual.</p>
+
+    <div class="note" style="margin:22px 0 0;border-left-color:var(--spore);background:rgba(91,224,176,.07)">
+      <p><strong>Where the 1% goes.</strong> 50% to the Liquidity Spores treasury, which backs every SPORES and funds every reward. 50% to team and marketing. Montra's fee route is public on-chain config, so this is verifiable rather than a claim — and every figure on this page is modelled on the treasury's half, not the full fee.</p>
+    </div>
+
+    <div class="chartcard" style="margin-top:22px">
+      <h3>Weekly HYPE fees reaching the treasury</h3>
+      <p class="sub">A launch spike that decays, over a baseline that does not. The baseline is the important half.</p>
+      <div id="c-fees" style="position:relative"></div>
+    </div>
+
+    <div class="grid2" style="margin-top:20px">
+      <div class="chartcard">
+        <h3>What volume buys</h3>
+        <p class="sub">The fee is fixed, so the whole model scales linearly with trading. The reserve settles at fifty times weekly treasury income, because a 2% weekly release balances inflow there.</p>
+        <table style="margin-top:6px">
+          <thead><tr><th class="num">Weekly volume</th><th class="num">To treasury</th><th class="num">Reserve settles at</th></tr></thead>
+          <tbody>
+            <tr><td class="num">700 HYPE</td><td class="num">3.5</td><td class="num">175</td></tr>
+            <tr><td class="num">2,000</td><td class="num">10</td><td class="num">500</td></tr>
+            <tr><td class="num">10,000</td><td class="num">50</td><td class="num">2,500</td></tr>
+            <tr><td class="num">50,000</td><td class="num">250</td><td class="num">12,500</td></tr>
+          </tbody>
+        </table>
+        <p class="sub" style="margin-top:14px">The charts on this page use the top row, which is the conservative case. Everything above it is upside, not a promise.</p>
+      </div>
+      <div class="chartcard">
+        <h3>Where SHROOMS sits</h3>
+        <p class="sub">Most of the supply ends up either staked in a strain or providing liquidity — both of which take it off the market.</p>
+        <div id="c-shrooms"></div>
+      </div>
+      <div class="chartcard">
+        <h3>Share of each harvest, by strain</h3>
+        <p class="sub">LP strains in violet, single-sided SHROOMS in green. LP carries 60% of the weight, because liquidity depth is what produces the trading volume that funds everything.</p>
+        <div id="c-strains" style="margin-top:16px"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================= the drip -->
+  <section class="sec">
+    <div class="head"><h2>Why we don't spend it all at the party</h2></div>
+    <p class="lede">Fees arrive front-loaded. Paying them out as they land burns the entire budget in the first month. Holding them in a reserve and releasing 2% a week turns a spike into an income — and because organic trading keeps topping the reserve up, it settles at an equilibrium around <b id="f-equilibrium">—</b> rather than draining away.</p>
+
+    <div class="chartcard" style="margin-top:22px">
+      <h3>Weekly SPORES rewards, year one</h3>
+      <p class="sub">Same fee income in both. Log scale, because the spend-on-arrival line falls through several orders of magnitude.</p>
+      <div id="c-rewards" style="position:relative"></div>
+      <details class="tablefall">
+        <summary>View as a table</summary>
+        <div id="t-rewards"></div>
+      </details>
+    </div>
+
+    <div class="grid3" style="margin-top:20px">
+      <div class="chartcard">
+        <h3 style="font-size:16px">Still paying at week 52</h3>
+        <p class="sub" style="margin-bottom:12px">Share of the peak weekly rate still being paid a year in.</p>
+        <div style="font-family:var(--display);font-weight:800;font-size:40px;letter-spacing:-.03em;color:var(--c-mint)" id="f-peak">—</div>
+        <p class="sub" style="margin:2px 0 14px">with the drip</p>
+        <div style="font-family:var(--display);font-weight:800;font-size:40px;letter-spacing:-.03em;color:var(--c-red)" id="f-pass">—</div>
+        <p class="sub" style="margin:2px 0 0">spending on arrival</p>
+      </div>
+      <div class="chartcard">
+        <h3 style="font-size:16px">The reserve builds</h3>
+        <p class="sub" style="margin-bottom:10px">Inflow exceeds the 2% release until the two meet. After that it is a standing income.</p>
+        <div id="c-reserve" style="position:relative"></div>
+      </div>
+      <div class="chartcard">
+        <h3 style="font-size:16px">Treasury at one year</h3>
+        <p class="sub" style="margin-bottom:10px">Reserve is not redeemable. Backing always is.</p>
+        <div id="c-split"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================= the floor -->
+  <section class="sec">
+    <div class="head"><h2>The floor only goes up</h2></div>
+    <p class="lede">Every SPORES is a claim on a slice of the HYPE treasury. Four things can happen to that ratio and none of them can lower it — this is asserted in the contract, not merely intended: a drip that would reduce backing per SPORES reverts.</p>
+
+    <div class="grid2" style="margin-top:22px">
+      <div class="chartcard">
+        <h3>HYPE redeemable per SPORES</h3>
+        <p class="sub">Year one, with 55% of rewards sold and 25% burned every week. It climbs anyway.</p>
+        <div id="c-floor" style="position:relative"></div>
+      </div>
+      <div class="chartcard">
+        <h3>What moves it</h3>
+        <p class="sub">The burn row is the one that matters. A player who spends SPORES on fertiliser hands their share of the treasury to everyone still holding.</p>
+        <table style="margin-top:4px">
+          <thead><tr><th>Action</th><th>Effect on the floor</th></tr></thead>
+          <tbody>
+            <tr><td>Drip</td><td style="color:var(--muted)">flat — mint is proportional</td></tr>
+            <tr><td>Redeem</td><td style="color:var(--muted)">flat — pro-rata out</td></tr>
+            <tr><td>Burn for fertiliser</td><td style="color:var(--c-mint)">rises</td></tr>
+            <tr><td>Burn to unlock a strain</td><td style="color:var(--c-mint)">rises</td></tr>
+            <tr><td>Donate</td><td style="color:var(--c-mint)">rises</td></tr>
+            <tr><td>Drip once capped</td><td style="color:var(--c-mint)">rises</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================================================== burn tracker -->
+  <section class="sec">
+    <div class="head">
+      <h2>Burn, live</h2>
+      <span class="live" id="livechip"><i></i>simulated until deployment</span>
+    </div>
+    <p class="lede">Every burn is permanent and visible on chain. Once the contracts are live this reads <code>Fertilised</code> and <code>PoolUnlocked</code> events straight from the farm; until then it runs simulated activity so you can see the shape of it.</p>
+
+    <div class="grid2" style="margin-top:22px">
+      <div class="burnwrap">
+        <div class="burnbig" id="burn-total">0</div>
+        <p class="burnsub">SPORES destroyed, year one</p>
+        <div class="spark" id="burn-spark" aria-hidden="true"></div>
+        <p class="burnsub" style="margin-top:10px">last 24 hours, hourly</p>
+      </div>
+      <div class="chartcard">
+        <h3>Cumulative burn</h3>
+        <p class="sub">Fertiliser scales with stake, so burn demand grows with the platform instead of running out once players max a level bar.</p>
+        <div id="c-burned" style="position:relative"></div>
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-top:20px">
+      <div class="chartcard">
+        <h3>Where burned SPORES went</h3>
+        <p class="sub">Two sinks, both permanent.</p>
+        <div id="c-sinks"></div>
+      </div>
+      <div class="chartcard">
+        <h3>Recent burns</h3>
+        <p class="sub">Newest first.</p>
+        <ul class="feed" id="burn-feed"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================== supply -->
+  <section class="sec">
+    <div class="head"><h2>SPORES supply</h2></div>
+    <p class="lede">Supply is an output, not a policy. It rises when fees arrive and falls when players burn, and it is capped at one billion. Reaching the cap would not be an ending: past it, incoming HYPE can mint nothing, so every HYPE becomes pure backing and the floor climbs faster.</p>
+
+    <div class="chartcard" style="margin-top:22px">
+      <h3>Circulating SPORES against the cap</h3>
+      <p class="sub">Log scale. Under this fee model supply stays well below the ceiling — the cap is real, but fee income is the binding constraint, not the cap.</p>
+      <div id="c-supply" style="position:relative"></div>
+    </div>
+  </section>
+
+  <!-- ====================================================== multipliers -->
+  <section class="sec">
+    <div class="head"><h2>Multipliers</h2></div>
+    <p class="lede">Boosts change your share of a fixed pot. They cannot mint SPORES, so however they are tuned the game layer can never inflate the token — that safety comes free from funding rewards with fees instead of emissions.</p>
+
+    <div class="grid2" style="margin-top:22px">
+      <div class="chartcard">
+        <h3>What a position can reach</h3>
+        <p class="sub">Fertiliser covers a quantity of stake, not a percentage. Stake more and the new stake is bare until you fertilise it too.</p>
+        <div id="c-mult" style="margin-top:16px"></div>
+        <ul class="legend" style="margin-top:16px">
+          <li><i style="background:var(--c-violet)"></i>base stake</li>
+          <li><i style="background:var(--c-mint)"></i>fertiliser, +0.50x</li>
+          <li><i style="background:var(--c-amber)"></i>lock term</li>
+        </ul>
+      </div>
+      <div class="chartcard">
+        <h3>Lock terms</h3>
+        <p class="sub">Locked SPORES comes back whole when the term ends — a lock is a temporary sink, not a burn.</p>
+        <table style="margin-top:4px">
+          <thead><tr><th>Term</th><th class="num">Bonus</th></tr></thead>
+          <tbody>
+            <tr><td>7 days</td><td class="num">+0.10x</td></tr>
+            <tr><td>30 days</td><td class="num">+0.25x</td></tr>
+            <tr><td>90 days</td><td class="num">+0.60x</td></tr>
+            <tr><td>180 days</td><td class="num">+1.00x</td></tr>
+          </tbody>
+        </table>
+        <p class="sub" style="margin-top:16px">Fertiliser costs 0.1 SPORES per staked token and adds +0.50x on what it covers. Everything together is capped at 3.00x, fixed in the contract.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================== vision -->
+  <section class="sec">
+    <div class="head"><h2>The long run</h2></div>
+    <p class="lede">Most farm tokens die the same way: emissions outrun demand, price falls, yields look worse, stakers leave, and it unwinds. Shrooms cannot fail that way, because there are no emissions to outrun anything. It can only run quiet — and quiet still pays.</p>
+
+    <div class="grid3" style="margin-top:22px">
+      <div class="chartcard">
+        <h3 style="font-size:16px">If trading grows</h3>
+        <p class="sub">The reserve builds faster than it releases, drips get larger, and every burn compounds the floor. The flywheel is simply volume.</p>
+      </div>
+      <div class="chartcard">
+        <h3 style="font-size:16px">If trading stays flat</h3>
+        <p class="sub">The reserve finds equilibrium where weekly fees equal the 2% release, and rewards become a standing income rather than a countdown.</p>
+      </div>
+      <div class="chartcard">
+        <h3 style="font-size:16px">If trading stops</h3>
+        <p class="sub">Minting stops, the reserve pays out slowly, and every SPORES stays redeemable against a treasury that is still fully backed. It winds down instead of collapsing.</p>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top:26px">
+      <p><strong>The mechanics here are real and in the contracts. The volume is an estimate.</strong> Montra's 1% fee is confirmed and the treasury takes half of it, so the link from volume to reward budget is exact. What is assumed is the trading itself: roughly 700 HYPE of sustained weekly volume after a launch spike that decays 18% a week — deliberately on the low side, and everything in the table above it is upside rather than a promise. Player behaviour is modelled at 55% of rewards sold and 25% burned. Real numbers will differ in both directions.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <span class="foot-brand"><img src="assets/logo.png" alt="" width="28" height="28">Shrooms</span>
+      <div class="socials">
+        <a href="https://x.com/Shroomshype" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 2H22l-7.3 8.4L23.3 22h-6.7l-5.2-6.9L5.4 22H2.3l7.8-9L1.7 2h6.9l4.7 6.3L18.9 2Zm-1.1 18h1.7L7.3 3.7H5.5L17.8 20Z"/></svg>X</a>
+        <a href="https://t.me/shroomshype" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.9 4.3 18.9 19c-.2 1-.8 1.3-1.7.8l-4.6-3.4-2.2 2.1c-.3.3-.5.5-1 .5l.3-4.7 8.5-7.7c.4-.3-.1-.5-.6-.2L7.1 12.9l-4.5-1.4c-1-.3-1-1 .2-1.4l17.6-6.8c.8-.3 1.5.2 1.5 1Z"/></svg>Telegram</a>
+        <a href="https://github.com/Shroomshype" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.6 22.4c.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 1.7 2.7 1.2 3.4.9.1-.7.4-1.2.7-1.5-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6A11.5 11.5 0 0 0 12 .5Z"/></svg>GitHub</a>
+      </div>
+    </div>
+    <p class="disc">Running on Elysium testnet. Rewards come from SHROOMS trading fees, not from emissions, so yields move with real trading volume. Every figure shown here is a simulation until the contracts are live.</p>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/tokenomics.js"></script>
+</body>
+</html>
